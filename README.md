@@ -1,5 +1,7 @@
 # EclipseViewer
 
+![The sun's track during the eclipse, dropping towards the skyline as seen from Troopers Hill](screenshots/banner.png)
+
 Can you see the partial solar eclipse of **12 August 2026** from Bristol, or does the horizon get in the way?
 
 The eclipse happens in the evening with the sun low in the west-north-west, so the answer depends on the skyline. This project models that skyline from elevation data for two viewing spots and compares it with the sun's path.
