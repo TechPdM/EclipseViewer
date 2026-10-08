@@ -11,6 +11,34 @@ The eclipse happens in the evening with the sun low in the west-north-west, so t
 
 Eclipse times for Bristol (BST): begins 18:17, maximum 19:13 (94% magnitude), ends 20:07.
 
+## Screenshots
+
+### Troopers Hill
+
+The verdict, key numbers and the view from the summit, with the sun's track dropping towards a flat skyline.
+
+![Troopers Hill overview](screenshots/troopers-hill-overview.png)
+
+The sun's altitude against the terrain horizon. The skyline stays close to 0° across the whole sector.
+
+![Troopers Hill horizon chart](screenshots/troopers-hill-horizon.png)
+
+Orbit view: the summit patch at the centre of the regional terrain, with sightlines to the sun.
+
+![Troopers Hill orbit view](screenshots/troopers-hill-orbit.png)
+
+### Oldbury Court
+
+From the valley floor the nearby ridge stands above eye level, so the clearance is smaller.
+
+![Oldbury Court overview](screenshots/oldbury-court-overview.png)
+
+The skyline sits around 1° up, and the sun meets it at 20:26, before true sunset.
+
+![Oldbury Court horizon chart](screenshots/oldbury-court-horizon.png)
+
+![Oldbury Court orbit view](screenshots/oldbury-court-orbit.png)
+
 ## Viewing
 
 Open either HTML file in a browser. Each page is self-contained, with:

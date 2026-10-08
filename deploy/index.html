@@ -324,13 +324,15 @@ const OBSX = -11.5, OBSZ = -102.1;
 
   // compass — makes the model's orientation self-evident
   function label(txt, colour, pos, size){
-    const c = document.createElement('canvas'); c.width = 256; c.height = 64;
+    const c = document.createElement('canvas'); c.height = 64;
     const x = c.getContext('2d');
+    x.font = 'bold 44px sans-serif';
+    c.width = Math.max(256, Math.ceil(x.measureText(txt).width) + 24);   // widen for long labels
     x.fillStyle = colour; x.font = 'bold 44px sans-serif'; x.textAlign = 'center';
-    x.textBaseline = 'middle'; x.fillText(txt, 128, 32);
+    x.textBaseline = 'middle'; x.fillText(txt, c.width/2, 32);
     const sp = new THREE.Sprite(new THREE.SpriteMaterial({
       map: new THREE.CanvasTexture(c), transparent:true, depthTest:false }));
-    sp.scale.set(size, size/4, 1); sp.position.copy(pos); scene.add(sp); return sp;
+    sp.scale.set(size*c.width/256, size/4, 1); sp.position.copy(pos); scene.add(sp); return sp;
   }
   const compass = [];
   [['N',0,0x8b949e],['E',90,0x8b949e],['S',180,0x8b949e],['W',270,0x8b949e],
@@ -342,7 +344,7 @@ const OBSX = -11.5, OBSZ = -102.1;
       new THREE.LineBasicMaterial({color:o[2], transparent:true, opacity:.5}));
     scene.add(ln);
     compass.push({line:ln, p:p, sprite:label(o[0], '#'+o[2].toString(16).padStart(6,'0'),
-                 p.clone(), o[1]===294.5?900:320), from:new THREE.Vector3()});
+                 p.clone(), 320), from:new THREE.Vector3()});
   });
   function placeCompass(){
     compass.forEach(function(o){
