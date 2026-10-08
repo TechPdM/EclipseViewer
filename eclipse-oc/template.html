@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Oldbury Court — 12 Aug 2026 partial solar eclipse sightline model</title>
+<meta name="description" content="Can you see the 12 August 2026 partial solar eclipse from Oldbury Court Estate, Bristol? A terrain horizon analysis and 3D model, built from EU-DEM 25 m elevation data.">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Oldbury Court eclipse sightline model">
+<meta property="og:description" content="93.7% partial eclipse, 12 Aug 2026, sun setting WNW. Does the horizon get in the way? Terrain model says no — but only 2.9° of clearance at fourth contact, and the skyline is close.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="theme-color" content="#0d1117">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='11' fill='%23ffb84d'/%3E%3Ccircle cx='10' cy='13' r='11' fill='%230d1117'/%3E%3C/svg%3E">
+<style>
+  :root{
+    --bg:#0d1117; --panel:#161b22; --line:#242c37; --ink:#e6edf3; --dim:#8b949e;
+    --go:#3fb950; --warn:#d29922; --no:#f85149; --sun:#ffb84d; --terr:#5b7a5b;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+       font:15px/1.5 -apple-system,BlinkMacSystemFont,"Segoe UI",Helvetica,Arial,sans-serif}
+  .wrap{max-width:1180px;margin:0 auto;padding:28px 20px 60px}
+  h1{font-size:24px;margin:0 0 4px}
+  .sub{color:var(--dim);margin:0 0 24px;font-size:14px}
+  .verdict{border:1px solid var(--go);border-left:5px solid var(--go);background:#0f2a15;
+           border-radius:10px;padding:18px 20px;margin-bottom:22px}
+  .verdict h2{margin:0 0 6px;font-size:19px;color:var(--go)}
+  .verdict p{margin:0;color:#c9d1d9}
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px;margin:18px 0 26px}
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:14px 16px}
+  .card .k{color:var(--dim);font-size:12px;text-transform:uppercase;letter-spacing:.06em}
+  .card .v{font-size:22px;font-weight:600;margin-top:4px}
+  .card .n{color:var(--dim);font-size:12.5px;margin-top:3px}
+  .pos{color:var(--go)}
+  .warn{color:var(--warn)}
+  h3{margin:32px 0 10px;font-size:16px;border-bottom:1px solid var(--line);padding-bottom:8px}
+  #scene{width:100%;height:520px;background:#070a0f;border:1px solid var(--line);
+         border-radius:10px;position:relative;overflow:hidden;cursor:grab}
+  #scene.drag{cursor:grabbing}
+  #hud{position:absolute;top:10px;left:12px;font:12px/1.5 ui-monospace,SFMono-Regular,Menlo,monospace;
+       color:var(--dim);background:rgba(13,17,23,.72);padding:8px 10px;border-radius:7px;pointer-events:none}
+  #hud b{color:var(--ink)}
+  .ctrl{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin:12px 0 0;
+        background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:12px 16px}
+  .ctrl label{font-size:13px;color:var(--dim);display:flex;align-items:center;gap:8px}
+  button{background:#21262d;color:var(--ink);border:1px solid #30363d;border-radius:7px;
+         padding:6px 12px;font-size:13px;cursor:pointer}
+  button.on{background:#1f6feb;border-color:#1f6feb}
+  input[type=range]{width:180px;accent-color:#1f6feb}
+  canvas.chart{width:100%;background:var(--panel);border:1px solid var(--line);border-radius:10px}
+  table{width:100%;border-collapse:collapse;font-size:14px;margin-top:6px}
+  th,td{text-align:left;padding:9px 10px;border-bottom:1px solid var(--line)}
+  th{color:var(--dim);font-weight:500;font-size:12px;text-transform:uppercase;letter-spacing:.05em}
+  td.num{font-variant-numeric:tabular-nums}
+  .note{color:var(--dim);font-size:13.5px}
+  .note li{margin:6px 0}
+  .warnbox{border:1px solid var(--warn);border-left:5px solid var(--warn);background:#2a2010;
+           border-radius:10px;padding:16px 18px;margin-top:16px}
+  .warnbox h4{margin:0 0 6px;color:var(--warn);font-size:15px}
+  .warnbox p,.warnbox li{color:#c9d1d9;font-size:14px;margin:5px 0}
+  .safety{border:1px solid var(--no);border-left:5px solid var(--no);background:#2a1214;
+          border-radius:10px;padding:16px 18px;margin-top:16px}
+  .safety h4{margin:0 0 6px;color:var(--no);font-size:15px}
+  .safety p{color:#c9d1d9;font-size:14px;margin:5px 0}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+<h1>Oldbury Court Estate, Bristol — eclipse sightline model</h1>
+<p class="sub">Partial solar eclipse, Wednesday 12 August 2026 · observer at 51.4881038&deg;N, 2.5302209&deg;W
+(Frome valley, 51&nbsp;m) · terrain from EU-DEM 25&nbsp;m · sun positions from NOAA solar-position algorithm</p>
+
+<div class="verdict">
+  <h2>Verdict: yes on terrain — but this is a valley, and the margin is thinner</h2>
+  <p>The sun clears the terrain skyline for the whole eclipse: <b>+19.6&deg;</b> at first contact falling to
+  <b>+2.9&deg;</b> at fourth. So on bare ground alone, it works. But unlike a hilltop site, here the skyline is
+  <em>close</em> — a suburban ridge 1.5&ndash;2.6&nbsp;km west, standing <b>0.8&deg; to 1.4&deg;</b> above your eye
+  line rather than sitting at zero. You are looking up out of the Frome valley, not down over a city. Read
+  the caveats before committing to this one.</p>
+</div>
+
+<div class="cards" id="cards"></div>
+
+<h3>3D model — terrain, horizon and the sun's track</h3>
+<div id="scene"><div id="hud"></div></div>
+<div class="ctrl">
+  <button id="bEye" class="on">Eye view</button>
+  <button id="bOrbit">Orbit view</button>
+  <label>Time <input type="range" id="tSlider" min="1080" max="1245" step="1" value="1153">
+    <b id="tLabel" style="color:var(--ink);font-variant-numeric:tabular-nums">19:13</b></label>
+  <label>Vertical exaggeration <input type="range" id="vex" min="1" max="6" step="0.5" value="2">
+    <b id="vexLabel" style="color:var(--ink)">2.0&times;</b></label>
+</div>
+<p class="note" style="margin-top:10px">Drag to look around, scroll to zoom.
+The orange arc is the sun's path from 18:00 to 20:45 BST; the red line is the computed terrain skyline,
+projected at 5&nbsp;km. Green patch = 1.6&nbsp;km of 40&nbsp;m-resolution terrain around the observer;
+grey = 12&nbsp;km of 600&nbsp;m-resolution context. Note the trench of the River Frome running through it. Vertical exaggeration is for legibility —
+the horizon maths below uses true 1:1 geometry.</p>
+
+<h3>Horizon panorama — skyline altitude vs bearing</h3>
+<canvas class="chart" id="pano" width="1140" height="420"></canvas>
+<p class="note">The filled profile is the terrain skyline as seen from the summit, with Earth curvature and
+standard atmospheric refraction applied. The dashed line is the near-field skyline only (everything within
+2.5&nbsp;km) — and here it lies almost exactly <em>on top of</em> the full profile from 251&deg; westward. That
+coincidence is the whole story of this site: your horizon is made of ground barely a mile away, not of hills
+on the far side of Bristol. Distant terrain never gets a look in.</p>
+
+<h3>Key moments</h3>
+<table id="evt"></table>
+
+<h3>What the model is and isn't</h3>
+<ul class="note">
+  <li><b>Terrain source:</b> EU-DEM v1.1, 25&nbsp;m posts, queried via OpenTopoData. 39 radial sightlines from
+      248&deg; to 305&deg;, 130 range samples each out to 60&nbsp;km (25&nbsp;m spacing near-field, coarsening with
+      distance), plus two grids for the 3D mesh.</li>
+  <li><b>Who's on the skyline:</b> almost entirely the <b>Purdown / Lockleaze ridge, 1.5&ndash;2.2&nbsp;km west</b>,
+      topping out at 81&ndash;91&nbsp;m. Along the sun's bearings that ridge stands 0.79&ndash;0.96&deg; above your eye
+      line, rising to 1.44&deg; by 294&deg;. Nothing beyond it is ever visible in this sector.</li>
+  <li><b>The ground profile WNW</b> tells the story: 51&nbsp;m where you stand, down to 36&ndash;45&nbsp;m across
+      the Frome floodplain for 1.4&nbsp;km, then up to 84&nbsp;m at 2&nbsp;km. A bowl with a rim.</li>
+  <li><b>Geometry:</b> apparent altitude = atan((h<sub>target</sub> &minus; h<sub>eye</sub> &minus; d&sup2;/2R') / d),
+      with R' = R/(1&minus;k), k = 0.13 — the standard refraction coefficient. Eye height 1.6&nbsp;m.</li>
+  <li><b>Sun positions</b> computed independently with the NOAA algorithm and cross-checked against
+      timeanddate.com: agreement within 0.1&deg; on all three contact points.</li>
+  <li><b>The DEM puts this spot at 51&nbsp;m.</b> Local relief within the 1.6&nbsp;km patch runs from 33&nbsp;m
+      (the river) to 78&nbsp;m, so small errors in where exactly you stand matter more here than on an open
+      summit — move 100&nbsp;m and the numbers shift.</li>
+  <li><b>Bare earth only.</b> EU-DEM is a terrain model. It contains no trees and no buildings.</li>
+</ul>
+
+<div class="warnbox">
+  <h4>Trees. This is a wooded river valley.</h4>
+  <p>EU-DEM is bare earth: no trees, no buildings. At an open hilltop that's a footnote. At Oldbury Court,
+  where the Frome valley is lined with mature woodland, it is <em>the</em> question. Here is what it takes to
+  block the sun at fourth contact (3.86&deg;, bearing 289&deg;), measured as height above local ground:</p>
+  <table style="max-width:600px">
+    <tr><th>Distance WNW</th><th>Ground height</th><th>Obstacle height needed to block you</th></tr>
+    <tr><td class="num">25 m</td><td class="num">50 m</td><td class="num">4 m &mdash; a tall hedge</td></tr>
+    <tr><td class="num">50 m</td><td class="num">50 m</td><td class="num">6 m</td></tr>
+    <tr><td class="num">100 m</td><td class="num">49 m</td><td class="num">10 m &mdash; an ordinary tree</td></tr>
+    <tr><td class="num">150 m</td><td class="num">36 m</td><td class="num">27 m</td></tr>
+    <tr><td class="num">250 m</td><td class="num">44 m</td><td class="num">26 m</td></tr>
+    <tr><td class="num">500 m</td><td class="num">44 m</td><td class="num">43 m</td></tr>
+  </table>
+  <p>So anything within about 120&nbsp;m to the west that is taller than a house will cost you the end of the
+  eclipse. Beyond 150&nbsp;m the ground drops away into the valley and you are safe from all but implausible timber.</p>
+  <p><b>What to do:</b> pick an open meadow with at least 150&nbsp;m of clear westward ground, and check the
+  bearing band <b>268&deg;&ndash;290&deg;</b> specifically &mdash; that is where the sun actually is, from first contact
+  to last. Then add whatever sits on the Purdown ridge 2&nbsp;km out: houses and mature trees there contribute
+  roughly 0.3&deg;, which eats about a tenth of your remaining margin. Survivable, but no longer the comfortable
+  cushion a hilltop gives you.</p>
+</div>
+
+<div class="safety">
+  <h4>Eyes</h4>
+  <p>93.7% magnitude is not "nearly dark, therefore safe". At every moment of this eclipse there is
+  un-eclipsed photosphere on view. Use ISO 12312-2 eclipse glasses, or a pinhole/binocular projection —
+  never look through unfiltered binoculars, a camera viewfinder or a telescope. A low sun feels comfortable
+  to look at, which is exactly what makes it dangerous.</p>
+</div>
+
+<p class="note" style="margin-top:24px">
+Sources:
+<a href="https://en.wikipedia.org/wiki/Oldbury_Court_Estate" style="color:#58a6ff">Oldbury Court Estate (Wikipedia)</a> ·
+<a href="https://www.timeanddate.com/eclipse/in/uk/bristol?iso=20260812" style="color:#58a6ff">timeanddate.com eclipse circumstances</a> ·
+<a href="https://www.opentopodata.org/datasets/eudem/" style="color:#58a6ff">EU-DEM 25&nbsp;m via OpenTopoData</a>
+</p>
+
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+/* ---------- data (injected) ---------- */
+const GRIDL = __GRIDL__;      // 41x41 @ 40 m, row 0 = south, col 0 = west
+const GRIDR = __GRIDR__;      // 21x21 @ 600 m
+const DATA  = __ANALYSIS__;   // {H0, hor[], track[], events[], sunset}
+
+const H0 = DATA.H0, HOR = DATA.hor, TRACK = DATA.track, EVENTS = DATA.events;
+const D2R = Math.PI/180;
+// DEM grids are centred on the observer. Scene axes: +X east, -Z north.
+const OBSX = 0, OBSZ = 0;
+
+/* ---------- summary cards ---------- */
+(function(){
+  const worst = EVENTS[2];
+  const c = [
+    ['Maximum eclipse','19:13 BST','0.937 magnitude · sun 11.8&deg; up, bearing 279&deg;'],
+    ['Eclipse window','18:17 → 20:07','ends 19 min before the sun hits the ridge at 20:26'],
+    ['Terrain skyline, WNW','0.79&ndash;0.96&deg;','close ridge 1.7&ndash;2.2 km out, not distant hills'],
+    ['Tightest clearance','<span class="warn">+'+worst.clear.toFixed(1)+'&deg;</span>','at fourth contact, 20:07']
+  ];
+  document.getElementById('cards').innerHTML = c.map(function(x){
+    return '<div class="card"><div class="k">'+x[0]+'</div><div class="v">'+x[1]+
+           '</div><div class="n">'+x[2]+'</div></div>';}).join('');
+})();
+
+/* ---------- events table ---------- */
+(function(){
+  let h = '<tr><th>Moment</th><th>Time (BST)</th><th>Sun altitude</th><th>Bearing</th>'+
+          '<th>Terrain skyline</th><th>Clearance</th></tr>';
+  EVENTS.forEach(function(e){
+    h += '<tr><td>'+e.label+'</td><td class="num">'+e.t+'</td><td class="num">'+e.alt.toFixed(2)+
+         '&deg;</td><td class="num">'+e.az.toFixed(1)+'&deg;</td><td class="num">'+e.hor.toFixed(2)+
+         '&deg;</td><td class="num pos">+'+e.clear.toFixed(2)+'&deg;</td></tr>';
+  });
+  h += '<tr><td>Sun drops behind the ridge</td><td class="num">'+DATA.ridgeset[0]+'</td><td class="num">'+
+       DATA.ridgeset[2].toFixed(2)+'&deg;</td><td class="num">'+DATA.ridgeset[1].toFixed(1)+
+       '&deg;</td><td class="num">'+DATA.ridgeset[2].toFixed(2)+'&deg;</td><td class="num">0.00&deg;</td></tr>';
+  h += '<tr><td>True (sea-level) sunset</td><td class="num">'+DATA.sunset[0]+'</td><td class="num">0.00&deg;</td>'+
+       '<td class="num">'+DATA.sunset[1].toFixed(1)+'&deg;</td><td class="num">&mdash;</td><td>&mdash;</td></tr>';
+  document.getElementById('evt').innerHTML = h;
+})();
+
+/* ---------- panorama chart ---------- */
+(function(){
+  const cv = document.getElementById('pano'), g = cv.getContext('2d');
+  const W = cv.width, H = cv.height, L = 58, R = 18, T = 18, B = 42;
+  const AZ0 = 246, AZ1 = 306, AL0 = -2, AL1 = 24;
+  const X = a => L + (a-AZ0)/(AZ1-AZ0)*(W-L-R);
+  const Y = v => T + (AL1-v)/(AL1-AL0)*(H-T-B);
+  g.fillStyle = '#161b22'; g.fillRect(0,0,W,H);
+
+  // grid
+  g.strokeStyle = '#242c37'; g.fillStyle = '#8b949e'; g.font = '11px monospace'; g.lineWidth = 1;
+  for(let a=250;a<=305;a+=5){g.beginPath();g.moveTo(X(a),T);g.lineTo(X(a),H-B);g.stroke();
+    g.textAlign='center';g.fillText(a+'°',X(a),H-B+16);}
+  for(let v=0;v<=24;v+=4){g.beginPath();g.moveTo(L,Y(v));g.lineTo(W-R,Y(v));g.stroke();
+    g.textAlign='right';g.fillText(v+'°',L-6,Y(v)+4);}
+  g.textAlign='center';g.fillStyle='#8b949e';
+  g.fillText('bearing (true)', (L+W-R)/2, H-8);
+
+  // terrain fill
+  g.beginPath(); g.moveTo(X(HOR[0].az), Y(HOR[0].alt));
+  HOR.forEach(r=>g.lineTo(X(r.az), Y(r.alt)));
+  g.lineTo(X(HOR[HOR.length-1].az), Y(AL0)); g.lineTo(X(HOR[0].az), Y(AL0)); g.closePath();
+  g.fillStyle = 'rgba(91,122,91,.55)'; g.fill();
+  g.strokeStyle = '#7ea87e'; g.lineWidth = 2; g.beginPath();
+  HOR.forEach((r,i)=> i?g.lineTo(X(r.az),Y(r.alt)):g.moveTo(X(r.az),Y(r.alt))); g.stroke();
+
+  // near-field profile
+  g.strokeStyle = '#d29922'; g.setLineDash([5,4]); g.lineWidth = 1.5; g.beginPath();
+  HOR.forEach((r,i)=> i?g.lineTo(X(r.az),Y(r.near)):g.moveTo(X(r.az),Y(r.near))); g.stroke();
+  g.setLineDash([]);
+
+  // zero line
+  g.strokeStyle='#4b5563'; g.setLineDash([2,3]); g.beginPath();
+  g.moveTo(L,Y(0)); g.lineTo(W-R,Y(0)); g.stroke(); g.setLineDash([]);
+
+  // sun track
+  g.strokeStyle = '#ffb84d'; g.lineWidth = 2.5; g.beginPath();
+  TRACK.forEach((p,i)=> i?g.lineTo(X(p.az),Y(p.alt)):g.moveTo(X(p.az),Y(p.alt))); g.stroke();
+
+  // eclipsed section thicker
+  g.strokeStyle = '#f0883e'; g.lineWidth = 5; g.beginPath(); let started=false;
+  TRACK.forEach(p=>{ if(p.mag>0){ started?g.lineTo(X(p.az),Y(p.alt)):g.moveTo(X(p.az),Y(p.alt)); started=true; }});
+  g.stroke();
+
+  // event markers
+  EVENTS.forEach(function(e){
+    g.fillStyle='#ffb84d'; g.beginPath(); g.arc(X(e.az),Y(e.alt),5,0,7); g.fill();
+    g.strokeStyle='#0d1117'; g.lineWidth=1.5; g.stroke();
+    g.fillStyle='#e6edf3'; g.font='11px monospace'; g.textAlign='left';
+    g.fillText(e.t.slice(0,5), X(e.az)+9, Y(e.alt)-7);
+    // clearance drop-line
+    g.strokeStyle='rgba(63,185,80,.6)'; g.setLineDash([3,3]); g.lineWidth=1.5;
+    g.beginPath(); g.moveTo(X(e.az),Y(e.alt)); g.lineTo(X(e.az),Y(e.hor)); g.stroke(); g.setLineDash([]);
+  });
+
+  // time ticks
+  g.fillStyle='#8b949e'; g.font='10px monospace'; g.textAlign='center';
+  TRACK.forEach(function(p){ if(p.min%30===0){
+    g.fillStyle='#ffb84d'; g.beginPath(); g.arc(X(p.az),Y(p.alt),2.5,0,7); g.fill();
+    g.fillStyle='#8b949e'; g.fillText(p.t, X(p.az), Y(p.alt)+16); }});
+
+  // legend
+  const lg=[['#f0883e','sun, eclipsed'],['#ffb84d','sun, uneclipsed'],
+            ['#7ea87e','terrain skyline (to 60 km)'],['#d29922','near skyline (< 2.5 km)']];
+  g.font='11px sans-serif'; g.textAlign='left'; let lx=L+8;
+  lg.forEach(function(o){ g.fillStyle=o[0]; g.fillRect(lx,T+6,14,3);
+    g.fillStyle='#8b949e'; g.fillText(o[1], lx+19, T+10); lx += 22 + g.measureText(o[1]).width + 14; });
+})();
+
+/* ---------- 3D scene ---------- */
+(function(){
+  const host = document.getElementById('scene');
+  const renderer = new THREE.WebGLRenderer({antialias:true});
+  renderer.setPixelRatio(Math.min(devicePixelRatio,2));
+  renderer.setSize(host.clientWidth, host.clientHeight);
+  host.appendChild(renderer.domElement);
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(0x070a0f);
+  scene.fog = new THREE.Fog(0x070a0f, 6000, 16000);
+  const cam = new THREE.PerspectiveCamera(55, host.clientWidth/host.clientHeight, 1, 40000);
+
+  scene.add(new THREE.AmbientLight(0x5a6b80, 0.9));
+  const key = new THREE.DirectionalLight(0xffd9a0, 1.15);
+  key.position.set(-4000, 1800, 1200); scene.add(key);
+
+  let vex = 2;
+  function mkMesh(grid, n, step, colour, lift){
+    const geo = new THREE.PlaneGeometry(step*(n-1), step*(n-1), n-1, n-1);
+    geo.rotateX(-Math.PI/2);
+    const m = new THREE.MeshLambertMaterial({color:colour, flatShading:false,
+              polygonOffset:true, polygonOffsetFactor:lift?-2:0});
+    const mesh = new THREE.Mesh(geo, m);
+    mesh.userData = {grid:grid, n:n, lift:lift||0};
+    return mesh;
+  }
+  // PlaneGeometry vertex order: row 0 = +Z... we map explicitly below
+  function applyH(mesh){
+    const {grid,n,lift} = mesh.userData, pos = mesh.geometry.attributes.position;
+    for(let r=0;r<n;r++) for(let c=0;c<n;c++){
+      // plane row r runs from -Z (north) to +Z; our grid row 0 is south
+      const gj = n-1-r, gi = c;
+      pos.setY(r*n+c, grid[gj*n+gi]*vex + lift);
+    }
+    pos.needsUpdate = true; mesh.geometry.computeVertexNormals();
+  }
+  const regional = mkMesh(GRIDR, 21, 600, 0x39424f, 0);
+  const local    = mkMesh(GRIDL, 41,  40, 0x54724f, 3);
+  scene.add(regional); scene.add(local);
+  applyH(regional); applyH(local);
+
+  // wireframe over local patch for readability
+  const wire = new THREE.LineSegments(new THREE.WireframeGeometry(local.geometry),
+               new THREE.LineBasicMaterial({color:0x7fa878, transparent:true, opacity:0.18}));
+  scene.add(wire);
+
+  const eyeY = () => H0*vex;
+
+  // observer marker + chimney
+  const marker = new THREE.Group();
+  const chim = new THREE.Mesh(new THREE.CylinderGeometry(2,2,14,8),
+               new THREE.MeshLambertMaterial({color:0xd0d0d0}));
+  chim.position.y = 7; marker.add(chim);
+  marker.position.x = OBSX; marker.position.z = OBSZ;
+  scene.add(marker);
+
+  // compass — makes the model's orientation self-evident
+  function label(txt, colour, pos, size){
+    const c = document.createElement('canvas'); c.width = 256; c.height = 64;
+    const x = c.getContext('2d');
+    x.fillStyle = colour; x.font = 'bold 44px sans-serif'; x.textAlign = 'center';
+    x.textBaseline = 'middle'; x.fillText(txt, 128, 32);
+    const sp = new THREE.Sprite(new THREE.SpriteMaterial({
+      map: new THREE.CanvasTexture(c), transparent:true, depthTest:false }));
+    sp.scale.set(size, size/4, 1); sp.position.copy(pos); scene.add(sp); return sp;
+  }
+  const compass = [];
+  [['N',0,0x8b949e],['E',90,0x8b949e],['S',180,0x8b949e],['W',270,0x8b949e],
+   ['WNW · behind the ridge 20:26',293.0,0xffb84d]].forEach(function(o){
+    const r = 2400, a = o[1]*D2R;
+    const p = new THREE.Vector3(OBSX + r*Math.sin(a), 0, OBSZ - r*Math.cos(a));
+    const ln = new THREE.Line(new THREE.BufferGeometry().setFromPoints(
+      [new THREE.Vector3(0,0,0), p.clone()]),
+      new THREE.LineBasicMaterial({color:o[2], transparent:true, opacity:.5}));
+    scene.add(ln);
+    compass.push({line:ln, p:p, sprite:label(o[0], '#'+o[2].toString(16).padStart(6,'0'),
+                 p.clone(), o[1]===294.5?900:320), from:new THREE.Vector3()});
+  });
+  function placeCompass(){
+    compass.forEach(function(o){
+      const y = H0*vex;
+      o.from.set(OBSX,y,OBSZ);
+      o.line.geometry.setFromPoints([o.from.clone(), new THREE.Vector3(o.p.x, y, o.p.z)]);
+      o.sprite.position.set(o.p.x, y + 60, o.p.z);
+    });
+  }
+
+  // sun track
+  const RS = 5000;
+  function dirOf(az, alt){
+    return new THREE.Vector3(Math.cos(alt*D2R)*Math.sin(az*D2R),
+                             Math.sin(alt*D2R),
+                            -Math.cos(alt*D2R)*Math.cos(az*D2R));
+  }
+  function trackPt(p){ const d = dirOf(p.az,p.alt).multiplyScalar(RS);
+                       d.x += OBSX; d.z += OBSZ; d.y += H0*vex; return d; }
+
+  const trkGeo = new THREE.BufferGeometry().setFromPoints(TRACK.map(trackPt));
+  scene.add(new THREE.Line(trkGeo, new THREE.LineBasicMaterial({color:0xffb84d})));
+  const ecl = TRACK.filter(p=>p.mag>0).map(trackPt);
+  const eclLine = new THREE.Line(new THREE.BufferGeometry().setFromPoints(ecl),
+                  new THREE.LineBasicMaterial({color:0xf0883e, linewidth:3}));
+  scene.add(eclLine);
+
+  const evtBalls = EVENTS.map(function(e){
+    const s = new THREE.Mesh(new THREE.SphereGeometry(90,16,12),
+              new THREE.MeshBasicMaterial({color:0xffd166}));
+    s.position.copy(trackPt(e)); scene.add(s); return s;
+  });
+
+  // horizon skyline ring
+  function horPts(){ return HOR.map(function(r){
+    const d = dirOf(r.az, r.alt).multiplyScalar(RS);
+    d.x += OBSX; d.z += OBSZ; d.y += H0*vex; return d; }); }
+  const horGeo = new THREE.BufferGeometry().setFromPoints(horPts());
+  scene.add(new THREE.Line(horGeo, new THREE.LineBasicMaterial({color:0xf85149})));
+
+  // moving sun
+  const sun = new THREE.Mesh(new THREE.SphereGeometry(150,20,16),
+              new THREE.MeshBasicMaterial({color:0xffb84d}));
+  scene.add(sun);
+  const ray = new THREE.Line(new THREE.BufferGeometry().setFromPoints(
+              [new THREE.Vector3(), new THREE.Vector3()]),
+              new THREE.LineBasicMaterial({color:0xffb84d, transparent:true, opacity:.45}));
+  scene.add(ray);
+
+  function interp(mins){
+    for(let i=0;i<TRACK.length-1;i++){
+      if(TRACK[i].min<=mins && mins<=TRACK[i+1].min){
+        const f=(mins-TRACK[i].min)/(TRACK[i+1].min-TRACK[i].min), a=TRACK[i], b=TRACK[i+1];
+        return {az:a.az+f*(b.az-a.az), alt:a.alt+f*(b.alt-a.alt),
+                hor:a.hor+f*(b.hor-a.hor), mag:a.mag+f*(b.mag-a.mag)};
+      }}
+    return TRACK[TRACK.length-1];
+  }
+
+  // camera control
+  let mode='eye', yaw=285*D2R, pitch=8*D2R, dist=3200, tMin=1153;
+  function place(){
+    if(mode==='eye'){
+      cam.position.set(OBSX, eyeY()+1.6*vex, OBSZ);
+      cam.lookAt(new THREE.Vector3().copy(dirOf(yaw/D2R, pitch/D2R)).multiplyScalar(1000)
+                 .add(new THREE.Vector3(OBSX, eyeY(), OBSZ)));
+      cam.fov = 55;
+    } else {
+      const y = Math.max(200, dist*Math.sin(pitch));
+      cam.position.set(OBSX - dist*Math.cos(pitch)*Math.sin(yaw), y+eyeY(),
+                       OBSZ + dist*Math.cos(pitch)*Math.cos(yaw));
+      cam.lookAt(OBSX, eyeY(), OBSZ);
+      cam.fov = 50;
+    }
+    cam.updateProjectionMatrix();
+  }
+
+  function update(){
+    placeCompass();
+    marker.position.y = GRIDL[20*41+20]*vex;   // grid cell under the observer
+    applyH(regional); applyH(local);
+    wire.geometry.dispose();
+    wire.geometry = new THREE.WireframeGeometry(local.geometry);
+    const s = interp(tMin);
+    const p = dirOf(s.az, s.alt).multiplyScalar(RS); p.y += H0*vex;
+    sun.position.copy(p);
+    ray.geometry.setFromPoints([new THREE.Vector3(OBSX,eyeY(),OBSZ), p]);
+    const hh = Math.floor(tMin/60), mm = tMin%60;
+    const lbl = String(hh).padStart(2,'0')+':'+String(mm).padStart(2,'0');
+    document.getElementById('tLabel').textContent = lbl;
+    document.getElementById('hud').innerHTML =
+      lbl+' BST<br>sun alt <b>'+s.alt.toFixed(1)+'&deg;</b> · bearing <b>'+s.az.toFixed(1)+'&deg;</b><br>'+
+      'skyline <b>'+s.hor.toFixed(2)+'&deg;</b> · clearance <b style="color:#3fb950">+'+
+      (s.alt-s.hor).toFixed(1)+'&deg;</b><br>eclipse magnitude <b>'+s.mag.toFixed(3)+'</b>';
+    place();
+  }
+
+  let drag=false, px=0, py=0;
+  host.addEventListener('mousedown', e=>{drag=true;px=e.clientX;py=e.clientY;host.classList.add('drag');});
+  addEventListener('mouseup', ()=>{drag=false;host.classList.remove('drag');});
+  addEventListener('mousemove', function(e){
+    if(!drag) return;
+    yaw += (e.clientX-px)*0.004; pitch += (e.clientY-py)*0.003;
+    pitch = Math.max(-0.35, Math.min(1.2, pitch));
+    px=e.clientX; py=e.clientY; place();
+  });
+  host.addEventListener('wheel', function(e){
+    e.preventDefault();
+    if(mode==='orbit'){ dist = Math.max(400, Math.min(20000, dist*(1+e.deltaY*0.001))); }
+    else { cam.fov = Math.max(18, Math.min(85, cam.fov + e.deltaY*0.03)); cam.updateProjectionMatrix(); }
+    place();
+  }, {passive:false});
+
+  document.getElementById('bEye').onclick = function(){
+    mode='eye'; yaw=285*D2R; pitch=8*D2R;
+    this.classList.add('on'); document.getElementById('bOrbit').classList.remove('on'); place();};
+  document.getElementById('bOrbit').onclick = function(){
+    mode='orbit'; yaw=285*D2R; pitch=0.45; dist=4200;
+    this.classList.add('on'); document.getElementById('bEye').classList.remove('on'); place();};
+  document.getElementById('tSlider').oninput = function(){ tMin=+this.value; update(); };
+  document.getElementById('vex').oninput = function(){
+    vex=+this.value; document.getElementById('vexLabel').textContent = vex.toFixed(1)+'×';
+    // rebuild static geometry that depends on vex
+    trkGeo.setFromPoints(TRACK.map(trackPt));
+    eclLine.geometry.setFromPoints(TRACK.filter(p=>p.mag>0).map(trackPt));
+    horGeo.setFromPoints(horPts());
+    EVENTS.forEach(function(e,i){ evtBalls[i].position.copy(trackPt(e)); });
+    update();
+  };
+
+  addEventListener('resize', function(){
+    renderer.setSize(host.clientWidth, host.clientHeight);
+    cam.aspect = host.clientWidth/host.clientHeight; cam.updateProjectionMatrix();
+  });
+
+  update();
+  (function loop(){ requestAnimationFrame(loop); renderer.render(scene, cam); })();
+})();
+</script>
+</body>
+</html>
