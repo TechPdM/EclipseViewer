@@ -9,7 +9,7 @@ The eclipse happens in the evening with the sun low in the west-north-west, so t
 | Site | Page | Verdict |
 | --- | --- | --- |
 | Troopers Hill (summit, 71 m) | `troopers-hill-eclipse.html` | Clear. The skyline never rises above 0.35°, leaving +3.7° of clearance at the end of the eclipse. |
-| Oldbury Court (Frome valley, 51 m) | `oldbury-court-eclipse.html` | Clear, but tighter. A ridge 1.5–2.6 km west sits 0.8–1.4° up, leaving +2.9° at the end. |
+| Oldbury Court (Frome valley, 51 m) | `oldbury-court-eclipse.html` | Clear, but tighter. A ridge 1.5–2.6 km west sits 0.8–1.4° up, leaving +2.9° at the end. [On the day](#on-the-day), trees hid the last few minutes. |
 
 Eclipse times for Bristol (BST): begins 18:17, maximum 19:13 (94% magnitude), ends 20:07.
 
@@ -43,6 +43,27 @@ Eclipse times for Bristol (BST): begins 18:17, maximum 19:13 (94% magnitude), en
 
 *Orbit view: the valley site at the centre of the regional terrain, with sightlines to the sun.*
 
+## On the day
+
+Three phone photos taken at Oldbury Court during the eclipse, with the model drawn over them. The camera's direction isn't recorded, so each photo is oriented by lining the model's sun up with the glare at the photo's timestamp.
+
+![Model overlaid on a photo taken at 18:40:29](photos/overlays/oldbury-court-1840b.jpg)
+
+*18:40:29 BST. Orange is the modelled sun track, red the modelled bare-earth skyline, and the green cross is where the track meets the trees.*
+
+![Model overlaid on a photo taken at 19:00:06](photos/overlays/oldbury-court-1900.jpg)
+
+*19:00:06 BST, from a few metres away. The cyan cross is where the model puts the sun when this photo is oriented by the trees in the 18:40:29 photo instead.*
+
+What the photos show:
+
+- **Trees, not terrain, were the skyline.** They stand 2–5° up across the sunset arc, against about 1° for the bare-earth model.
+- **The end of the eclipse was probably hidden.** All three photos put the sun's centre reaching the trees at about 20:02, at 4.5° up, five minutes before the eclipse ended at 20:07.
+- **The sun's height matched the model to about 0.5°** between photos 20 minutes apart. Two photos taken 25 seconds apart from the same spot agree to 0.1°.
+- **The sun's bearing couldn't be tested over the 20 minutes.** The 1.4° sideways gap in the second overlay is what moving a few metres does to trees about 150 m away.
+
+The crossing time depends on the lens's field of view, taken as 24 mm equivalent from the photo metadata. At 22 mm it would be about 20:07 and at 26 mm about 19:57.
+
 ## Viewing
 
 Open either HTML file in a browser. Each page is self-contained, with:
@@ -69,6 +90,7 @@ troopers-hill-eclipse.html    Finished page, Troopers Hill
 oldbury-court-eclipse.html    Finished page, Oldbury Court
 eclipse/                      Analysis and page source, Troopers Hill
 eclipse-oc/                   Analysis and page source, Oldbury Court
+photos/                       Photos from the day at Oldbury Court, and the model overlays
 deploy/                       Netlify-ready copy of the Troopers Hill page
 ```
 
@@ -84,6 +106,13 @@ python3 analyse.py
 ```
 
 This prints the clearance at each contact and rewrites `analysis.json`.
+
+To rebuild the photo overlays (needs `numpy` and `Pillow`):
+
+```sh
+cd eclipse-oc
+python3 overlay.py
+```
 
 ## Deploying
 
