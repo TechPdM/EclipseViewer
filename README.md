@@ -45,22 +45,28 @@ Eclipse times for Bristol (BST): begins 18:17, maximum 19:13 (94% magnitude), en
 
 ## On the day
 
-Three phone photos taken at Oldbury Court during the eclipse, with the model drawn over them. The camera's direction isn't recorded, so each photo is oriented by lining the model's sun up with the glare at the photo's timestamp.
+Three phone photos taken at Oldbury Court during the eclipse, with the model drawn over them. The key comparison in each is the cyan circle, where the model puts the sun at the moment the photo was taken, against the sun in the photo.
 
-![Model overlaid on a photo taken at 18:40:29](photos/overlays/oldbury-court-1840b.jpg)
+The camera's direction isn't recorded, so one photo has to act as the anchor: in the 18:40:29 photo the track is fitted to the sun. The trees in that photo then place the track in the other two, so those are real tests.
 
-*18:40:29 BST. Orange is the modelled sun track, red the modelled bare-earth skyline, and the green cross is where the track meets the trees.*
+![Model overlaid on a photo taken at 18:40:04](photos/overlays/oldbury-court-1840a.jpg)
+
+*18:40:04 BST, a real test: the model's sun is 0.1° from the sun in the photo. The sun's disc is 0.53° wide.*
 
 ![Model overlaid on a photo taken at 19:00:06](photos/overlays/oldbury-court-1900.jpg)
 
-*19:00:06 BST, from a few metres away. The cyan cross is where the model puts the sun when this photo is oriented by the trees in the 18:40:29 photo instead.*
+*19:00:06 BST, a real test from a few metres away: 0.5° out in height and 1.4° sideways. Moving shifts the nearby trees sideways, which accounts for the sideways gap.*
+
+![Model overlaid on a photo taken at 18:40:29](photos/overlays/oldbury-court-1840b.jpg)
+
+*18:40:29 BST, the anchor photo: the match here is by construction.*
 
 What the photos show:
 
+- **The sun's height matched the model to about 0.5°** between photos 20 minutes apart, during which the sun dropped 3.1°. Two photos taken 25 seconds apart from the same spot agree to 0.1°.
+- **The sun's bearing couldn't be tested over the 20 minutes.** The 1.4° sideways gap is what moving a few metres does to trees about 150 m away.
 - **Trees, not terrain, were the skyline.** They stand 2–5° up across the sunset arc, against about 1° for the bare-earth model.
 - **The end of the eclipse was probably hidden.** All three photos put the sun's centre reaching the trees at about 20:02, at 4.5° up, five minutes before the eclipse ended at 20:07.
-- **The sun's height matched the model to about 0.5°** between photos 20 minutes apart. Two photos taken 25 seconds apart from the same spot agree to 0.1°.
-- **The sun's bearing couldn't be tested over the 20 minutes.** The 1.4° sideways gap in the second overlay is what moving a few metres does to trees about 150 m away.
 
 The crossing time depends on the lens's field of view, taken as 24 mm equivalent from the photo metadata. At 22 mm it would be about 20:07 and at 26 mm about 19:57.
 
